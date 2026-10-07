@@ -1,44 +1,12 @@
+import { Iproduct } from "@/types/productTypes";
+import { toBanglaNumber, toBanglaUnit } from "@/utils/product";
 import MarqueeText from "react-marquee-text"
 import "react-marquee-text/dist/styles.css"
 
-interface Product {
-    id: number;
-    slug: string;
-    nameBn: string;
-    category: string;
-    categoryNameBn: string;
-    categoryIcon: string;
-    unit: string;
-    image: string;
-    today: number;
-    yesterday: number;
-    lastWeek: number;
-    lastMonth: number;
-    change: {
-        dir: "up" | "down";
-        pct: number;
-    };
-}
-
-const toBanglaNumber = (value: number | string) => {
-    return value
-        .toString()
-        .replace(/\d/g, (digit) => "০১২৩৪৫৬৭৮৯"[Number(digit)]);
-};
-const toBanglaUnit = (unit: string) => {
-    const units: Record<string, string> = {
-        kg: "কেজি",
-        litre: "লিটার",
-        piece: "পিস",
-        dozen: "ডজন",
-    };
-
-    return units[unit.toLowerCase()] || unit;
-};
 
 const Marquee = async () => {
     const res = await fetch("https://api.api-store.workers.dev/api/bazardor/products");
-    const data: Product[] = await res.json();
+    const data: Iproduct[] = await res.json();
 
     return (
         <MarqueeText direction="right" duration={80} pauseOnHover  className="border-b">
