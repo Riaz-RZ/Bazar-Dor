@@ -2,22 +2,21 @@
 import Image from "next/image";
 import Navlinks from "./Navlinks";
 import Link from "next/link";
+import DateDisplay from "./DateDisplay";
 
 
 const Header = () => {
-    const date = new Date().toLocaleDateString("bn-BD", {
-        dateStyle: "full",
-    });
+
 
     return (
         <header>
-            <div className="flex items-center justify-between max-w-7xl w-full mx-auto py-3">
+            <div className="flex items-center justify-between max-w-7xl w-full mx-auto py-3 px-6">
                 <Link href={'/'}>
                 <div className="flex items-center gap-3">
                     <Image className="border-white rounded-2xl p-2 bg-green-600" src={'/logo-icon.png'} alt="navlogo" height={50} width={50} />
                     <div>
                         <h2 className="font-bold text-2xl">বাজার দর</h2>
-                        <p className="text-gray-500">{date}</p>
+                        <p className="text-gray-500"><DateDisplay/></p>
                     </div>
                 </div>
                 </Link>
