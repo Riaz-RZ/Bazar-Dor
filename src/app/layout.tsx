@@ -21,14 +21,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-theme="light"
       className={`${notoSerifBengali.className} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-emerald-50">
-        <Header/>
-        <Marquee/>
-        <main className="max-w-7xl mx-auto">
+      <body className="min-h-screen flex flex-col bg-emerald-50">
+        <div className="sticky top-0 z-50 bg-emerald-100">
+          <Header />
+          <Marquee />
+        </div>
+        <main className="max-w-7xl mx-auto flex-1">
           {children}
         </main>
-        <Footer/>
-        </body>
+        <Footer />
+      </body>
     </html>
   );
 }

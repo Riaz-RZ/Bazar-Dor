@@ -12,7 +12,7 @@ const Navlinks = async() => {
     const data: Iitems[] = await res.json();
     return (
         <div className="flex justify-start gap-8 border py-3 border-gray-200 ps-90">
-            {data.map((n, i) => <Link key={i} href={n.slug}>{n.icon}{n.nameBn}</Link>)}
+            {data.map((n) => <Link key={n.id} href={`/category/${n.slug}`}>{n.icon}{n.nameBn}</Link>)}
         </div>
     );
 };

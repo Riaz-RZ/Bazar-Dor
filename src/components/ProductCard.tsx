@@ -1,10 +1,12 @@
 import { Iproduct } from "@/types/productTypes";
 import { toBanglaNumber, toBanglaUnit } from "@/utils/product";
+import Link from "next/link";
+
 
 
 const ProductCard = ({ products }: { products: Iproduct }) => {
-    console.log(products);
     return (
+        <Link href={`/products/${products.id}`}>
         <div className="card bg-base-100 w-96 shadow-sm">
             <div className="card-body">
                 <div className="flex">
@@ -37,6 +39,7 @@ const ProductCard = ({ products }: { products: Iproduct }) => {
                 </div>
             </div>
         </div>
+        </Link>
     );
 };
 
