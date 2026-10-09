@@ -6,9 +6,9 @@ import DateDisplay from "./DateDisplay";
 const Hero = () => {
 
     return (
-        <section className="mt-6">
+        <section className="mt-6 ">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="grid grid-cols-2 items-center overflow-hidden rounded-3xl border border-gray-200">
+                <div className="grid grid-cols-2 items-center overflow-hidden rounded-3xl border border-gray-200 bg-white">
 
                     {/* Left Content */}
                     <div className="py-10 pl-10">

@@ -57,7 +57,7 @@ export default async function Home() {
         </section>
 
         {/* All Products */}
-        <section className="mt-16">
+        <section className="mt-16 scroll-mt-24" id="library">
           <h1 className="text-2xl font-bold">সব পণ্য</h1>
           <p className="py-2 mb-8">
             মোট {toBanglaNumber(data.length)}টি পণ্য দেখানো হচ্ছে
