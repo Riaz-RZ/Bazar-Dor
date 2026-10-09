@@ -1,4 +1,5 @@
 import { toBanglaNumber, toBanglaUnit } from '@/utils/product';
+import Link from 'next/link';
 
 const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: string }> }) => {
     const { singleId } = await params;
@@ -25,6 +26,32 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
 
     return (
         <section className="max-w-7xl mx-auto px-6 py-10">
+            {/* Breadcrumb */}
+            <div className="breadcrumbs text-sm mb-4">
+                <ul>
+                    <li>
+                        <Link href="/" className="hover:text-emerald-600">
+                            হোম
+                        </Link>
+                    </li>
+
+                    <li>
+                        <Link
+                            href={`/category/${data.category}`}
+                            className="hover:text-emerald-600"
+                        >
+                            {data.categoryNameBn}
+                        </Link>
+                    </li>
+
+                    <li>
+                        <span className="font-medium text-gray-700">
+                            {data.nameBn}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
             {/* Category Header */}
             <div className="bg-white border-2 rounded-xl border-gray-200 mb-8 flex justify-between">
                 {/* Left */}
@@ -41,7 +68,7 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
                             {`প্রতি ${toBanglaUnit(data.unit)} · ${data.categoryNameBn}`}
                         </p>
 
-                        <div className={"inline-flex items-center gap-2 rounded-lg text-sm"}>
+                        <div className={"inline-flex items-center rounded-lg text-sm whitespace-nowrap"}>
 
                             <span>
                                 গতকালের তুলনায় আজ দাম
@@ -74,8 +101,8 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
 
                     <div
                         className={`mt-2 text-lg font-bold ${data.change.dir === "up"
-                                ? "text-red-600"
-                                : "text-green-600"
+                            ? "text-red-600"
+                            : "text-green-600"
                             }`}
                     >
                         {data.change.dir === "up" ? "🔺" : "🔻"}{" "}
