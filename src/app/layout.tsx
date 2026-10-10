@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Noto_Serif_Bengali } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Navlinks from "@/components/Navlinks";
+import DateDisplay from "@/components/DateDisplay";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 
@@ -23,8 +26,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-screen flex flex-col bg-emerald-50">
         <div className="sticky top-0 z-50 bg-emerald-100">
-          <Header />
-          <Marquee />
+          <Header
+            date={<DateDisplay />}
+            navlinks={
+              <Suspense fallback={<div className="h-12.5" aria-hidden="true" />}>
+                <Navlinks />
+              </Suspense>
+            }
+          />
+          <Suspense
+            fallback={<div className="h-10 border-b border-gray-200" aria-hidden="true" />}
+          >
+            <Marquee />
+          </Suspense>
         </div>
         <main className="max-w-7xl mx-auto flex-1">
           {children}

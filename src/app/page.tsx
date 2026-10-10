@@ -1,16 +1,27 @@
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
+import ApiErrorMessage from "@/components/ApiErrorMessage";
 import { Iproduct } from "@/types/productTypes";
+import { fetchApiJson } from "@/utils/api";
 import { toBanglaNumber } from "@/utils/product";
+import { Suspense } from "react";
 
 
-
-export default async function Home() {
-  const res = await fetch(
-    "https://api.api-store.workers.dev/api/bazardor/products"
+async function HomeProducts() {
+  const result = await fetchApiJson<Iproduct[]>(
+    "https://api.api-store.workers.dev/api/bazardor/products",
+    "পণ্যের দাম",
   );
 
-  const data: Iproduct[] = await res.json();
+  if (result.data === null) {
+    return (
+      <main className="max-w-7xl mx-auto px-6 py-10">
+        <ApiErrorMessage message={result.error} />
+      </main>
+    );
+  }
+
+  const data = result.data;
 
   const priceUpProducts = data
     .filter((product) => product.change.dir === "up")
@@ -23,9 +34,6 @@ export default async function Home() {
     .slice(0, 6);
 
   return (
-    <div>
-      <Hero />
-
       <main className="max-w-7xl mx-auto px-6">
         {/* Price Up */}
         <section className="mt-20">
@@ -73,7 +81,23 @@ export default async function Home() {
           </div>
         </section>
       </main>
+  );
+}
 
+export default function Home() {
+  return (
+    <div>
+      <Hero />
+      <Suspense
+        fallback={
+          <div
+            className="max-w-7xl mx-auto min-h-96 px-6"
+            aria-label="পণ্য লোড হচ্ছে"
+          />
+        }
+      >
+        <HomeProducts />
+      </Suspense>
     </div>
   );
 }

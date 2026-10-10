@@ -1,10 +1,49 @@
+import ApiErrorMessage from '@/components/ApiErrorMessage';
 import { toBanglaNumber, toBanglaUnit } from '@/utils/product';
+import { fetchApiJson } from '@/utils/api';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: string }> }) => {
+type ProductPageProps = {
+    params: Promise<{ singleId: string }>;
+};
+
+type Market = {
+    market: string;
+    division: string;
+    min: number;
+    max: number;
+};
+
+type ProductDetails = {
+    id: number;
+    category: string;
+    categoryNameBn: string;
+    nameBn: string;
+    image: string;
+    unit: string;
+    today: number;
+    yesterday: number;
+    change: { dir: "up" | "down"; pct: number };
+    markets?: Market[];
+};
+
+const ProductDetailsContent = async ({ params }: ProductPageProps) => {
     const { singleId } = await params;
-    const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/products/${singleId}`);
-    const data = await res.json();
+    const result = await fetchApiJson<ProductDetails>(
+        `https://api.api-store.workers.dev/api/bazardor/products/${encodeURIComponent(singleId)}`,
+        "পণ্যের বিস্তারিত",
+    );
+
+    if (result.data === null) {
+        return (
+            <section className="max-w-7xl mx-auto px-6 py-10">
+                <ApiErrorMessage message={result.error} />
+            </section>
+        );
+    }
+
+    const data = result.data;
 
     const markets = data.markets ?? [];
 
@@ -177,19 +216,9 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
                             </thead>
 
                             <tbody>
-                                {data.markets?.map(
-                                    (
-                                        market: {
-                                            market: string;
-                                            division: string;
-                                            min: number;
-                                            max: number;
-                                            avg: number;
-                                        },
-                                        index: number
-                                    ) => (
-                                        <tr
-                                            key={`${market.market}-${index}`}
+                                {markets.map((market, index) => (
+                                    <tr
+                                        key={`${market.market}-${index}`}
                                             className={`border-t border-gray-100 transition-colors hover:bg-emerald-100/70 ${index % 2 === 0
                                                 ? "bg-white"
                                                 : "bg-gray-50"
@@ -217,8 +246,7 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
                                                 )} টাকা
                                             </td>
                                         </tr>
-                                    )
-                                )}
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -236,4 +264,17 @@ const SingleProductDetails = async ({ params }: { params: Promise<{ singleId: st
 
 };
 
-export default SingleProductDetails;
+export default function SingleProductDetails(props: ProductPageProps) {
+    return (
+        <Suspense
+            fallback={
+                <div
+                    className="max-w-7xl mx-auto min-h-96 px-6 py-10"
+                    aria-label="পণ্যের তথ্য লোড হচ্ছে"
+                />
+            }
+        >
+            <ProductDetailsContent {...props} />
+        </Suspense>
+    );
+}

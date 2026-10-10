@@ -1,27 +1,38 @@
 
+import ApiErrorMessage from "@/components/ApiErrorMessage";
 import ProductCard from "@/components/ProductCard";
 import { Iproduct } from "@/types/productTypes";
+import { fetchApiJson } from "@/utils/api";
 import { categoryIcons, categoryNames } from "@/utils/category";
 import { toBanglaNumber } from "@/utils/product";
 import Link from "next/link";
+import { Suspense } from "react";
 
-const CategoryPage = async ({
-    params, searchParams, }: {
-        params: Promise<{ categoryId: string }>;
-        searchParams: Promise<{ sort?: string }>;
-    }) => {
+type CategoryPageProps = {
+    params: Promise<{ categoryId: string }>;
+    searchParams: Promise<{ sort?: string }>;
+};
+
+const CategoryPageContent = async ({
+    params, searchParams,
+}: CategoryPageProps) => {
     const { categoryId } = await params;
     const { sort } = await searchParams;
 
-    const res = await fetch(`https://api.api-store.workers.dev/api/bazardor/products?category=${encodeURIComponent(categoryId)}`);
+    const result = await fetchApiJson<Iproduct[]>(
+        `https://api.api-store.workers.dev/api/bazardor/products?category=${encodeURIComponent(categoryId)}`,
+        "এই বিভাগের পণ্যের দাম",
+    );
 
-    if (!res.ok) {
-        throw new Error(
-            `Failed to load products for category "${categoryId}"`
+    if (result.data === null) {
+        return (
+            <section className="max-w-7xl mx-auto px-6 py-10">
+                <ApiErrorMessage message={result.error} />
+            </section>
         );
     }
 
-    const products: Iproduct[] = await res.json();
+    const products = result.data;
 
     // Sort products
     const sortedProducts = [...products].sort((a, b) => {
@@ -118,4 +129,17 @@ const CategoryPage = async ({
     );
 };
 
-export default CategoryPage;
+export default function CategoryPage(props: CategoryPageProps) {
+    return (
+        <Suspense
+            fallback={
+                <div
+                    className="max-w-7xl mx-auto min-h-96 px-6 py-10"
+                    aria-label="পণ্য লোড হচ্ছে"
+                />
+            }
+        >
+            <CategoryPageContent {...props} />
+        </Suspense>
+    );
+}
