@@ -9,7 +9,7 @@ import { Suspense } from "react";
 
 async function HomeProducts() {
   const result = await fetchApiJson<Iproduct[]>(
-    "https://api.api-store.workers.dev/api/bazardor/products",
+    "https://openapi.programming-hero.com/api/bazardor/products",
     "পণ্যের দাম",
   );
 
@@ -34,7 +34,7 @@ async function HomeProducts() {
     .slice(0, 6);
 
   return (
-      <main className="max-w-7xl mx-auto px-6">
+      <main className="max-w-7xl mx-auto px-6 mb-8">
         {/* Price Up */}
         <section className="mt-20">
           <h1 className="text-2xl font-bold mb-6">▲ আজ দাম বেড়েছে</h1>

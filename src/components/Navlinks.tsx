@@ -11,7 +11,7 @@ interface Iitems {
 
 const Navlinks = async() => {
     const result = await fetchApiJson<Iitems[]>(
-        "https://api.api-store.workers.dev/api/bazardor/categories",
+        "https://openapi.programming-hero.com/api/bazardor/categories",
         "বাজারের বিভাগ",
     );
 

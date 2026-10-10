@@ -3,14 +3,16 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut, useSession } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
+import UserDropdown from "./UserDropdown";
 
 type HeaderProps = {
     date: ReactNode;
     navlinks: ReactNode;
+    marquee: ReactNode;
 };
 
-const Header = ({ date, navlinks }: HeaderProps) => {
+const Header = ({ date, navlinks, marquee }: HeaderProps) => {
     const { data: session, isPending } = useSession();
 
     const authLinks = (
@@ -18,15 +20,14 @@ const Header = ({ date, navlinks }: HeaderProps) => {
             {isPending ? (
                 <span>লোড হচ্ছে...</span>
             ) : session?.user ? (
-                <>
-                    <span>{session.user.name}</span>
-                    <button onClick={() => signOut()}>Sign out</button>
-                </>
+                <UserDropdown name={session.user.name}
+                    email={session.user.email} />
             ) : (
                 <>
                     <Link href="/signin" className="btn btn-outline">
                         সাইন ইন
                     </Link>
+
                     <Link
                         href="/signup"
                         className="btn btn-active bg-green-600 text-white"
@@ -63,6 +64,7 @@ const Header = ({ date, navlinks }: HeaderProps) => {
             </div>
 
             {navlinks}
+            {marquee}
         </header>
     );
 };

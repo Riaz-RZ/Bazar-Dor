@@ -1,8 +1,11 @@
 'use client'
 import { signIn, signUp } from "@/lib/auth-client";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const SignUpPage = () => {
+    const router = useRouter();
     const handleGoogleSignIn = async () => {
         try {
             const resData = await signIn.social({
@@ -11,6 +14,7 @@ const SignUpPage = () => {
             console.log("Google sign in successful:", resData);
         } catch (error) {
             console.error("Google sign in failed:", error);
+            toast.error("Google দিয়ে সাইন ইন করা যায়নি!");
         }
     };
 
@@ -22,51 +26,61 @@ const SignUpPage = () => {
             console.log("Github sign in successful:", resData);
         } catch (error) {
             console.error("Github sign in failed:", error);
+            toast.error("GitHub দিয়ে সাইন ইন করা যায়নি!");
         }
     };
+
 
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         const formData = new FormData(e.currentTarget);
         const data = Object.fromEntries(formData.entries());
-        console.log(data);
 
         const password = String(data.password ?? "");
         const confirmPassword = String(data.confirmPassword ?? "");
 
-        // Check password confirmation
         if (password !== confirmPassword) {
-            alert("পাসওয়ার্ড দুটি মিলছে না!");
+            toast.error("পাসওয়ার্ড দুটি মিলছে না!");
             return;
         }
 
-        const { data: resData, error } = await signUp.email({
-            name: String(data.name ?? ""),
-            email: String(data.email ?? ""),
-            password,
-        });
+        try {
+            const { data: resData, error } = await signUp.email({
+                name: String(data.name ?? "").trim(),
+                email: String(data.email ?? "").trim(),
+                password,
+            });
 
-        if (error) {
+            if (error) {
+                console.error("Sign up failed:", error);
+                toast.error(error.message || "অ্যাকাউন্ট তৈরি করা যায়নি!");
+                return;
+            }
+
+            toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
+            router.replace("/");
+            router.refresh();
+
+            console.log("Sign up successful:", resData);
+        } catch (error) {
             console.error("Sign up failed:", error);
-            return;
+            toast.error("সমস্যা হয়েছে। আবার চেষ্টা করুন!");
         }
-
-        console.log("Sign up successful:", resData);
     };
 
     return (
-        <div className="flex min-h-[80vh] items-center justify-center px-4 py-10">
-            <div className="w-full max-w-md">
+        <div className="flex items-center justify-center px-4">
+            <div className="w-full max-w-md mt-10">
                 {/* Heading */}
-                <div className="mb-6 text-center">
+                <div className="mb-2 text-center">
                     <h1 className="text-2xl font-bold">অ্যাকাউন্ট তৈরি করুন </h1>
-                    <p className="mt-2 text-sm text-gray-500"> বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন। </p>
                 </div>
 
                 {/* Signup Form */}
                 <form onSubmit={onSubmit}>
-                    <fieldset className="fieldset rounded-2xl border border-base-300 bg-base-200 px-6 py-6 shadow-xl">
+                    <fieldset className="fieldset rounded-2xl border border-gray-200 bg-white px-5 py-3 shadow-xl sm:px-6 [@media(max-height:720px)]:gap-0.5 [@media(max-height:720px)]:py-2">
                         {/* Name */}
                         <label htmlFor="name" className="label">
                             নাম
@@ -75,35 +89,35 @@ const SignUpPage = () => {
                             id="name"
                             name="name"
                             type="text"
-                            className="input w-full"
+                            className="input input-sm w-full [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                             placeholder="যেমন: রহিম উদ্দিন"
                             autoComplete="name"
                             required
                         />
 
                         {/* Email */}
-                        <label htmlFor="email" className="label mt-2">
+                        <label htmlFor="email" className="label mt-1">
                             ইমেইল
                         </label>
                         <input
                             id="email"
                             name="email"
                             type="email"
-                            className="input w-full"
+                            className="input input-sm w-full [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                             placeholder="আপনার ইমেইল লিখুন"
                             autoComplete="email"
                             required
                         />
 
                         {/* Password */}
-                        <label htmlFor="password" className="label mt-2">
+                        <label htmlFor="password" className="label mt-1">
                             পাসওয়ার্ড
                         </label>
                         <input
                             id="password"
                             name="password"
                             type="password"
-                            className="input w-full"
+                            className="input input-sm w-full [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                             placeholder="কমপক্ষে ৮ অক্ষর"
                             autoComplete="new-password"
                             minLength={8}
@@ -111,14 +125,14 @@ const SignUpPage = () => {
                         />
 
                         {/* Confirm Password */}
-                        <label htmlFor="confirmPassword" className="label mt-2">
+                        <label htmlFor="confirmPassword" className="label mt-1">
                             পাসওয়ার্ড নিশ্চিত করুন
                         </label>
                         <input
                             id="confirmPassword"
                             name="confirmPassword"
                             type="password"
-                            className="input w-full"
+                            className="input input-sm w-full [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                             placeholder="আবার লিখুন"
                             autoComplete="new-password"
                             minLength={8}
@@ -126,18 +140,18 @@ const SignUpPage = () => {
                         />
 
                         {/* Submit */}
-                        <button type="submit" className="btn btn-success mt-6 w-full text-white font-bold">
+                        <button type="submit" className="btn btn-success btn-sm mt-3 w-full text-white font-bold [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7">
                             অ্যাকাউন্ট তৈরি করুন
                         </button>
 
                         {/* Divider */}
-                        <div className="divider my-4">অথবা</div>
+                        <div className="divider my-1 [@media(max-height:720px)]:my-0">অথবা</div>
 
                         {/* Social Login */}
                         <div className="flex flex-col gap-3 sm:flex-row">
                             <button
                                 type="button"
-                                className="btn btn-outline flex-1 whitespace-nowrap"
+                                className="btn btn-outline btn-sm flex-1 whitespace-nowrap [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                                 onClick={handleGoogleSignIn}
                             >
                                 <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -162,7 +176,7 @@ const SignUpPage = () => {
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-outline flex-1 whitespace-nowrap"
+                                className="btn btn-outline btn-sm flex-1 whitespace-nowrap [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
                                 onClick={handleGithubSignIn}
                             >
                                 <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
@@ -173,10 +187,10 @@ const SignUpPage = () => {
                         </div>
 
                         {/* Login Link */}
-                        <p className="mt-5 text-center text-sm text-green-600">
+                        <p className="mt-2 text-center text-sm text-green-600 [@media(max-height:720px)]:mt-1">
                             অ্যাকাউন্ট আছে?{" "}
                             <Link
-                                href="/login"
+                                href="/signin"
                                 className="link link-primary font-semibold"
                             >
                                 সাইন ইন করুন
@@ -186,8 +200,8 @@ const SignUpPage = () => {
                 </form>
 
                 {/* Home Link */}
-                <div className="mt-4 text-center">
-                    <Link href="/" className="btn btn-ghost btn-sm gap-2">
+                <div className="mt-1 text-center">
+                    <Link href="/" className="btn btn-ghost btn-xs gap-2">
                         ← হোম পেজে ফিরে যান
                     </Link>
                 </div>

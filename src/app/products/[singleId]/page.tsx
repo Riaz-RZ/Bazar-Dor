@@ -31,7 +31,7 @@ type ProductDetails = {
 const ProductDetailsContent = async ({ params }: ProductPageProps) => {
     const { singleId } = await params;
     const result = await fetchApiJson<ProductDetails>(
-        `https://api.api-store.workers.dev/api/bazardor/products/${encodeURIComponent(singleId)}`,
+        `https://openapi.programming-hero.com/api/bazardor/products/${encodeURIComponent(singleId)}`,
         "পণ্যের বিস্তারিত",
     );
 

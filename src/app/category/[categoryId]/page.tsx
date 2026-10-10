@@ -20,7 +20,7 @@ const CategoryPageContent = async ({
     const { sort } = await searchParams;
 
     const result = await fetchApiJson<Iproduct[]>(
-        `https://api.api-store.workers.dev/api/bazardor/products?category=${encodeURIComponent(categoryId)}`,
+        `https://openapi.programming-hero.com/api/bazardor/products?category=${encodeURIComponent(categoryId)}`,
         "এই বিভাগের পণ্যের দাম",
     );
 

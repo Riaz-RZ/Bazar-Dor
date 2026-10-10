@@ -8,7 +8,7 @@ import "react-marquee-text/dist/styles.css"
 
 const Marquee = async () => {
     const result = await fetchApiJson<Iproduct[]>(
-        "https://api.api-store.workers.dev/api/bazardor/products",
+        "https://openapi.programming-hero.com/api/bazardor/products",
         "পণ্যের দাম",
     );
 

@@ -7,6 +7,8 @@ import Navlinks from "@/components/Navlinks";
 import DateDisplay from "@/components/DateDisplay";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
@@ -33,15 +35,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <Navlinks />
               </Suspense>
             }
+            marquee={
+              <Suspense
+                fallback={<div className="h-10 border-b border-gray-200" aria-hidden="true" />}
+              >
+                <Marquee />
+              </Suspense>
+            }
           />
-          <Suspense
-            fallback={<div className="h-10 border-b border-gray-200" aria-hidden="true" />}
-          >
-            <Marquee />
-          </Suspense>
         </div>
         <main className="max-w-7xl mx-auto flex-1">
           {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            theme="colored"
+          />
         </main>
         <Footer />
       </body>
