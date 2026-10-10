@@ -95,7 +95,6 @@ bazardor/
 └── README.md
 ```
 
-*Your actual folder structure may differ.*
 
 ## 🎯 Project Goal
 
