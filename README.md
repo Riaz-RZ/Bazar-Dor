@@ -67,6 +67,17 @@ Create a `.env.local` file in the project root and add the environment variables
 
 Use the variable names expected by your project. Never commit secrets or credentials to GitHub.
 
+### Netlify authentication configuration
+
+Set these environment variables in the Netlify project settings for each deployment context that uses authentication:
+
+- `BETTER_AUTH_SECRET`: a strong, randomly generated secret. Keep the same value across deployments so existing sessions remain valid.
+- `BETTER_AUTH_BASE_URL`: the public HTTPS origin of the deployment. `BETTER_AUTH_URL` is also supported as a fallback.
+- `MONGODB_URL`: the connection string used by the existing server-side authentication adapter.
+- The `BETTER_AUTH_GOOGLE_CLIENT_ID`, `BETTER_AUTH_GOOGLE_SECRET`, `BETTER_AUTH_GITHUB_CLIENT_ID`, and `BETTER_AUTH_GITHUB_SECRET` credentials for the configured OAuth providers.
+
+The products proxy validates sessions through `/api/auth/get-session` using the incoming cookies. Database access stays in the Node.js authentication API route, outside the Netlify edge bundle. Session responses are not cached, refreshed cookies are forwarded to the browser, and authentication service failures return a temporary error rather than allowing access.
+
 **5. Start the development server**
 
 ```bash
@@ -115,4 +126,3 @@ Developed with ❤️ using Next.js, TypeScript, and modern web technologies.
 ---
 
 ⭐ If you find this project useful, consider giving it a star on GitHub.
-
