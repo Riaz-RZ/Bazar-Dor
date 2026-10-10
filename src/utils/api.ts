@@ -1,6 +1,6 @@
 export type ApiResult<T> =
     | { data: T; error: null }
-    | { data: null; error: string };
+    | { data: null; error: string; status: number | null };
 
 export async function fetchApiJson<T>(
     url: string,
@@ -15,6 +15,7 @@ export async function fetchApiJson<T>(
         return {
             data: null,
             error: `${resource} সার্ভারের সাথে সংযোগ করা যাচ্ছে না।`,
+            status: null,
         };
     }
 
@@ -26,6 +27,7 @@ export async function fetchApiJson<T>(
                 response.status === 429
                     ? `${resource} সার্ভারে অনেক অনুরোধ গেছে (HTTP 429)। কিছুক্ষণ পরে আবার চেষ্টা করুন।`
                     : `${resource} লোড করা যায়নি (HTTP ${response.status})।`,
+            status: response.status,
         };
     }
 
@@ -34,6 +36,7 @@ export async function fetchApiJson<T>(
         return {
             data: null,
             error: `${resource} সার্ভার থেকে ভুল ধরনের response এসেছে।`,
+            status: response.status,
         };
     }
 
@@ -45,6 +48,7 @@ export async function fetchApiJson<T>(
         return {
             data: null,
             error: `${resource} সার্ভারের response পড়া যায়নি।`,
+            status: response.status,
         };
     }
 }

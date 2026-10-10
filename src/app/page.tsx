@@ -1,6 +1,7 @@
 
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
+import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import ApiErrorMessage from "@/components/ApiErrorMessage";
 import { Iproduct } from "@/types/productTypes";
 import { fetchApiJson } from "@/utils/api";
@@ -98,13 +99,22 @@ export default function Home() {
       <Suspense
         fallback={
           <div
-            className="mx-auto min-h-96 w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+            className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8"
             role="status"
             aria-label="পণ্য লোড হচ্ছে"
           >
-            <p className="animate-pulse text-sm text-gray-500">
-              পণ্য লোড হচ্ছে...
-            </p>
+            <section className="animate-pulse">
+              <div className="mb-5 h-7 w-44 rounded bg-emerald-100" />
+              <ProductGridSkeleton />
+            </section>
+            <section className="animate-pulse">
+              <div className="mb-5 h-7 w-44 rounded bg-emerald-100" />
+              <ProductGridSkeleton />
+            </section>
+            <section className="animate-pulse">
+              <div className="mb-5 h-7 w-32 rounded bg-emerald-100" />
+              <ProductGridSkeleton count={3} />
+            </section>
           </div>
         }
       >

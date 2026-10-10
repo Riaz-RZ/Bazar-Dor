@@ -3,6 +3,7 @@ import ApiErrorMessage from "@/components/ApiErrorMessage";
 import { toBanglaNumber, toBanglaUnit } from "@/utils/product";
 import { fetchApiJson } from "@/utils/api";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 type ProductPageProps = {
@@ -40,6 +41,10 @@ const ProductDetailsContent = async ({
   );
 
   if (result.data === null) {
+    if (result.status === 404) {
+      notFound();
+    }
+
     return (
       <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
         <ApiErrorMessage message={result.error} />
@@ -48,6 +53,15 @@ const ProductDetailsContent = async ({
   }
 
   const data = result.data;
+  if (
+    !data ||
+    typeof data !== "object" ||
+    typeof data.id !== "number" ||
+    typeof data.nameBn !== "string"
+  ) {
+    notFound();
+  }
+
   const markets = data.markets ?? [];
 
   const minPrice = markets.length

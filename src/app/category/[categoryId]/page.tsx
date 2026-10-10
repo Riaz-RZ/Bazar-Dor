@@ -1,11 +1,13 @@
 
 import ApiErrorMessage from "@/components/ApiErrorMessage";
 import ProductCard from "@/components/ProductCard";
+import ProductGridSkeleton from "@/components/ProductGridSkeleton";
 import { Iproduct } from "@/types/productTypes";
 import { fetchApiJson } from "@/utils/api";
 import { categoryIcons, categoryNames } from "@/utils/category";
 import { toBanglaNumber } from "@/utils/product";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 type CategoryPageProps = {
@@ -19,6 +21,10 @@ const CategoryPageContent = async ({
 }: CategoryPageProps) => {
   const { categoryId } = await params;
   const { sort } = await searchParams;
+
+  if (!Object.hasOwn(categoryNames, categoryId)) {
+    notFound();
+  }
 
   const result = await fetchApiJson<Iproduct[]>(
     `https://openapi.programming-hero.com/api/bazardor/products?category=${encodeURIComponent(categoryId)}`,
@@ -135,15 +141,13 @@ export default function CategoryPage(props: CategoryPageProps) {
     <Suspense
       fallback={
         <div
-          className="mx-auto min-h-96 w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8"
+          className="mx-auto w-full max-w-7xl space-y-5 px-4 py-8 sm:px-6 sm:py-10 lg:px-8"
           role="status"
           aria-label="পণ্য লোড হচ্ছে"
         >
-          <div className="animate-pulse space-y-4">
-            <div className="h-20 rounded-xl bg-emerald-100" />
-            <div className="h-12 rounded-xl bg-emerald-100" />
-            <div className="h-48 rounded-xl bg-emerald-100" />
-          </div>
+          <div className="h-20 animate-pulse rounded-xl bg-emerald-100" />
+          <div className="h-12 animate-pulse rounded-xl bg-emerald-100" />
+          <ProductGridSkeleton />
         </div>
       }
     >
