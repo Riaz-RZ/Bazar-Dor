@@ -1,23 +1,23 @@
+
 'use client';
 
-
-import { updateUser, useSession } from "@/lib/auth-client";
+import { updateUser, useSession, signOut } from "@/lib/auth-client";
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signOut } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 
 const UserProfile = () => {
-
     const router = useRouter();
     const { data: session, isPending } = useSession();
     const [isSigningOut, setIsSigningOut] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const handleUpdateUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData = new FormData(e.currentTarget);
+        const form = e.currentTarget;
+        const formData = new FormData(form);
         const name = formData.get("name")?.toString().trim();
 
         if (!name) {
@@ -26,6 +26,8 @@ const UserProfile = () => {
         }
 
         try {
+            setIsUpdating(true);
+
             const { error } = await updateUser({ name });
 
             if (error) {
@@ -38,8 +40,11 @@ const UserProfile = () => {
         } catch (error) {
             console.error("Profile update failed:", error);
             toast.error("সমস্যা হয়েছে। আবার চেষ্টা করুন!");
+        } finally {
+            setIsUpdating(false);
         }
     };
+
     const handleSignOut = async () => {
         try {
             setIsSigningOut(true);
@@ -65,17 +70,18 @@ const UserProfile = () => {
     if (isPending) {
         return (
             <div className="flex justify-center py-20">
-                <span className="loading loading-spinner loading-lg text-green-600"></span>
+                <span className="loading loading-spinner loading-lg text-green-600" />
             </div>
         );
     }
 
     if (!session?.user) {
         return (
-            <div className="text-center py-20">
-                <h2 className="text-2xl font-bold mb-4">
+            <div className="px-4 py-16 text-center sm:py-20">
+                <h2 className="mb-4 text-xl font-bold sm:text-2xl">
                     আপনি সাইন ইন করেননি
                 </h2>
+
                 <Link href="/signin" className="btn bg-green-600 text-white">
                     সাইন ইন করুন
                 </Link>
@@ -84,62 +90,85 @@ const UserProfile = () => {
     }
 
     return (
-        <section className="max-w-2xl mx-auto my-10 ">
-
-            <div className="">
-                <h1 className="text-2xl font-bold mb-2">
+        <section className="mx-auto my-6 w-full max-w-2xl px-4 sm:my-10 sm:px-6">
+            {/* Page heading */}
+            <div className="mb-5 sm:mb-6">
+                <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
                     আমার প্রোফাইল
                 </h1>
-                <p className="mb-6">
+
+                <p className="text-sm text-gray-600 sm:text-base">
                     আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
                 </p>
             </div>
 
-            <div className="p-6 rounded-xl shadow-md bg-white flex gap-2 mb-6">
-
-                <div className="avatar">
-                    <div className="w-9 rounded-full bg-green-600 text-white">
-                        <span>
-                            {(session.user.name ?? "").charAt(0).toUpperCase()}
-                        </span>
+            {/* User information card */}
+            <div className="mb-6 flex flex-col gap-4 rounded-xl bg-white p-4 shadow-md sm:flex-row sm:items-center sm:p-6">
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                    <div className="avatar placeholder shrink-0">
+                        <div className="w-11 rounded-full bg-green-600 text-white sm:w-12">
+                            <span className="text-lg">
+                                {(session.user.name ?? "").charAt(0).toUpperCase()}
+                            </span>
+                        </div>
                     </div>
 
+                    <div className="min-w-0">
+                        <p className="wrap-break-word font-semibold text-gray-900">
+                            {session.user.name}
+                        </p>
+
+                        <p className="break-all text-sm text-gray-500">
+                            {session.user.email}
+                        </p>
+                    </div>
                 </div>
 
-                <div>
-                    <p className="font-semibold">{session.user.name}</p>
-                    <p className="font-semibold text-gray-400">{session.user.email}</p>
-                </div>
-                <div className="ms-40">
-                    <button
-                        type="button"
-                        onClick={handleSignOut}
-                        disabled={isSigningOut}
-                        className="text-error cursor-pointer btn btn-dash"
-                    >
-                        ↪ {isSigningOut ? "সাইন আউট হচ্ছে..." : "সাইন আউট"}
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    onClick={handleSignOut}
+                    disabled={isSigningOut}
+                    className="btn btn-outline btn-error w-full sm:w-auto"
+                >
+                    {isSigningOut ? "সাইন আউট হচ্ছে..." : "↪ সাইন আউট"}
+                </button>
             </div>
-            <form onSubmit={handleUpdateUser}>
 
-                <fieldset className="fieldset rounded-2xl border border-gray-200 bg-white px-5 py-6 shadow-xl sm:px-6 [@media(max-height:720px)]:gap-0.5 [@media(max-height:720px)]:py-2">
-                    <h1 className="font-bold text-xl">তথ্য</h1>
-                    {/* Name */}
+            {/* Update profile form */}
+            <form onSubmit={handleUpdateUser}>
+                <fieldset className="fieldset rounded-2xl border border-gray-200 bg-white px-4 py-5 shadow-md sm:px-6 sm:py-6">
+                    <legend className="px-2 text-xl font-bold">
+                        তথ্য আপডেট
+                    </legend>
+
                     <label htmlFor="name" className="label">
                         নাম
                     </label>
+
                     <input
                         id="name"
                         name="name"
                         type="text"
-                        className="input input-sm w-full [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7"
-                        placeholder=""
+                        defaultValue={session.user.name ?? ""}
+                        className="input input-bordered w-full"
                         autoComplete="name"
+                        placeholder="আপনার নাম লিখুন"
                         required
                     />
-                    <button type="submit" className="btn btn-success bg-green-700 btn-sm mt-3 w-full text-white font-bold [@media(max-height:720px)]:h-7 [@media(max-height:720px)]:min-h-7">
-                        আপডেট
+
+                    <button
+                        type="submit"
+                        disabled={isUpdating}
+                        className="btn mt-4 w-full border-green-700 bg-green-700 text-white hover:bg-green-800"
+                    >
+                        {isUpdating ? (
+                            <>
+                                <span className="loading loading-spinner loading-sm" />
+                                আপডেট হচ্ছে...
+                            </>
+                        ) : (
+                            "আপডেট"
+                        )}
                     </button>
                 </fieldset>
             </form>

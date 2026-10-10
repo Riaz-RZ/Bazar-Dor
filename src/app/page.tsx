@@ -1,3 +1,4 @@
+
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import ApiErrorMessage from "@/components/ApiErrorMessage";
@@ -5,7 +6,6 @@ import { Iproduct } from "@/types/productTypes";
 import { fetchApiJson } from "@/utils/api";
 import { toBanglaNumber } from "@/utils/product";
 import { Suspense } from "react";
-
 
 async function HomeProducts() {
   const result = await fetchApiJson<Iproduct[]>(
@@ -15,7 +15,7 @@ async function HomeProducts() {
 
   if (result.data === null) {
     return (
-      <main className="max-w-7xl mx-auto px-6 py-10">
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
         <ApiErrorMessage message={result.error} />
       </main>
     );
@@ -33,71 +33,83 @@ async function HomeProducts() {
     .sort((a, b) => b.change.pct - a.change.pct)
     .slice(0, 6);
 
+  const gridClass =
+    "grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6";
+
+  const sectionTitleClass =
+    "mb-4 text-xl font-bold sm:mb-6 sm:text-2xl";
+
   return (
-      <main className="max-w-7xl mx-auto px-6 mb-8">
-        {/* Price Up */}
-        <section className="mt-20">
-          <h1 className="text-2xl font-bold mb-6">▲ আজ দাম বেড়েছে</h1>
+    <main className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8">
+      {/* Price Up */}
+      <section className="mt-10 sm:mt-14 lg:mt-16">
+        <h2 className={sectionTitleClass}>
+          <span className="text-red-500">▲</span> আজ দাম বেড়েছে
+        </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {priceUpProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                products={product}
-              />
-            ))}
-          </div>
-        </section>
+        <div className={gridClass}>
+          {priceUpProducts.map((product) => (
+            <ProductCard key={product.id} products={product} />
+          ))}
+        </div>
+      </section>
 
-        {/* Price Down */}
-        <section className="mt-20 mb-16">
-          <h1 className="text-2xl font-bold mb-6">▼ আজ দাম কমেছে</h1>
+      {/* Price Down */}
+      <section className="mt-10 sm:mt-14 lg:mt-16">
+        <h2 className={sectionTitleClass}>
+          <span className="text-green-600">▼</span> আজ দাম কমেছে
+        </h2>
 
+        <div className={gridClass}>
+          {priceDownProducts.map((product) => (
+            <ProductCard key={product.id} products={product} />
+          ))}
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {priceDownProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                products={product}
-              />
-            ))}
-          </div>
-        </section>
+      {/* All Products */}
+      <section
+        id="library"
+        className="mt-12 scroll-mt-24 sm:mt-16 lg:mt-20"
+      >
+        <h2 className="text-xl font-bold sm:text-2xl">
+          সব পণ্য
+        </h2>
 
-        {/* All Products */}
-        <section className="mt-16 scroll-mt-24" id="library">
-          <h1 className="text-2xl font-bold">সব পণ্য</h1>
-          <p className="py-2 mb-8">
-            মোট {toBanglaNumber(data.length)}টি পণ্য দেখানো হচ্ছে
-          </p>
+        <p className="mb-5 mt-2 text-sm text-gray-600 sm:mb-7 sm:text-base">
+          মোট {toBanglaNumber(data.length)}টি পণ্য দেখানো হচ্ছে
+        </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {data.map((product) => (
-              <ProductCard
-                key={product.id}
-                products={product}
-              />
-            ))}
-          </div>
-        </section>
-      </main>
+        <div className={gridClass}>
+          {data.map((product) => (
+            <ProductCard key={product.id} products={product} />
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Hero />
+
       <Suspense
         fallback={
           <div
-            className="max-w-7xl mx-auto min-h-96 px-6"
+            className="mx-auto min-h-96 w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+            role="status"
             aria-label="পণ্য লোড হচ্ছে"
-          />
+          >
+            <p className="animate-pulse text-sm text-gray-500">
+              পণ্য লোড হচ্ছে...
+            </p>
+          </div>
         }
       >
         <HomeProducts />
       </Suspense>
-    </div>
+    </>
   );
 }
