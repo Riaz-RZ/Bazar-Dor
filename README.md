@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 BazaarDor — বাজার দর
 
-## Getting Started
+**BazaarDor** is a Bengali-language market price tracking web application that helps users easily explore the latest prices of essential products. It provides a simple, responsive interface to compare prices, monitor daily price changes, and browse products by category.
 
-First, run the development server:
+## ✨ Features
+
+- 📊 **Today's Market Prices** — View the latest prices of essential products in one place.
+- 📈 **Daily Price Changes** — Track whether product prices have increased or decreased, including the percentage change.
+- 🗂️ **Category-Based Browsing** — Explore products by category for easier navigation.
+- 🔍 **Product Details** — View individual product information, price history comparisons, and market-wise price ranges.
+- 🏪 **Market-Wise Prices** — Compare minimum and maximum prices across different markets and divisions when data is available.
+- ↕️ **Price Sorting** — Sort products from low to high or high to low.
+- 📱 **Fully Responsive Design** — Enjoy a mobile-friendly experience on smartphones, tablets, laptops, and desktops.
+- 🇧🇩 **Bengali User Interface** — Browse market information with Bengali text and localized number formatting.
+- 🔐 **Authentication** — Support user sign-in and account management using Better Auth.
+- 👤 **User Profile Management** — View and manage profile information.
+- 🔔 **Toast Notifications** — Receive feedback through interactive notifications.
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| [Next.js](https://nextjs.org/) | React framework for building the application |
+| [React](https://react.dev/) | Component-based user interface |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe development |
+| [Tailwind CSS](https://tailwindcss.com/) | Responsive styling |
+| [DaisyUI](https://daisyui.com/) | UI components and themes |
+| [Better Auth](https://www.better-auth.com/) | Authentication and session management |
+| [MongoDB](https://www.mongodb.com/) | Database integration |
+| [React Toastify](https://fkhadra.github.io/react-toastify/) | Toast notifications |
+
+## 🚀 Getting Started
+
+Follow these steps to run BazaarDor locally.
+
+### Prerequisites
+
+Make sure you have installed:
+
+- [Node.js](https://nodejs.org/)
+- npm, or another compatible package manager
+- Git
+
+### Installation
+
+**1. Clone the repository**
+
+```bash
+git clone YOUR_REPOSITORY_URL
+```
+
+**2. Navigate to the project directory**
+
+```bash
+cd bazardor
+```
+
+**3. Install dependencies**
+
+```bash
+npm install
+```
+
+**4. Configure environment variables**
+
+Create a `.env.local` file in the project root and add the environment variables required by your application, such as your authentication secret, database connection string, and API configuration.
+
+Use the variable names expected by your project. Never commit secrets or credentials to GitHub.
+
+**5. Start the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**6. Open the application**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Project Structure
 
-## Learn More
+A typical structure for this Next.js project looks like this:
 
-To learn more about Next.js, take a look at the following resources:
+```text
+bazardor/
+├── public/              # Static assets
+├── src/
+│   ├── app/             # App Router pages and layouts
+│   ├── components/      # Reusable UI components
+│   ├── types/           # TypeScript type definitions
+│   └── utils/           # Helper functions and utilities
+├── .env.local           # Local environment variables
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*Your actual folder structure may differ.*
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎯 Project Goal
 
-## Deploy on Vercel
+The goal of BazaarDor is to make essential market price information easier to access and understand through a clean, user-friendly Bengali interface. The application aims to help users compare prices and stay informed about daily market fluctuations.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔮 Future Improvements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 📉 Interactive historical price charts
+- ❤️ Favorite products and personalized watchlists
+- 🔔 Price-change alerts
+- 🏙️ Advanced filtering by location and market
+- 📅 Historical price reports and trend analysis
+
+## 👨‍💻 Developer
+
+Developed with ❤️ using Next.js, TypeScript, and modern web technologies.
+
+---
+
+⭐ If you find this project useful, consider giving it a star on GitHub.
+
