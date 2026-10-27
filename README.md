@@ -71,8 +71,6 @@ The application focuses on presenting product prices, categories, and price-chan
 | Git & GitHub | Version control and source-code management |
 | Vercel | Application deployment |
 
-*Verify the exact versions against your current `package.json` before publishing this section.*
-
 ## 📦 Dependencies
 
 The project uses npm for dependency management.
@@ -88,7 +86,6 @@ Key technologies include:
 - `tailwindcss`
 - `daisyui`
 
-*Confirm the package names and versions in `package.json`. Add other libraries only if they are actually used by the project.*
 
 ## 🚀 Installation & Setup
 
@@ -115,12 +112,6 @@ npm install
 
 ### 3. Configure Environment Variables
 
-If the project requires environment variables, create the appropriate `.env.local` file in the project root and configure the required values.
-
-```env
-# Add the environment variables required by your project
-```
-
 Do not commit real API keys, database credentials, authentication secrets, or other sensitive values to GitHub.
 
 ### 4. Run the Development Server
@@ -141,23 +132,14 @@ npm run build
 
 ## ⚙️ Environment Variables
 
-Add only the variables actually required by your application.
-
 | Variable | Description |
 |---|---|
 | `API_URL` | Placeholder for the API endpoint, if configurable through an environment variable |
 | `MONGODB_URI` | Placeholder for a MongoDB connection string, only if required |
 | `BETTER_AUTH_SECRET` | Placeholder for an authentication secret, only if required |
 
-**Important:** These are examples, not confirmed environment-variable names for this repository. Check your existing configuration before adding them to your `.env.local` file or documentation.
-
-If no environment variables are required, remove this section or state that no additional configuration is needed.
-
 ## 📁 Folder Structure
 
-The following is an illustrative structure for a Next.js application. Update it to match the actual files and folders in your repository.
-
-```text
 Bazar-Dor/
 ├── public/
 ├── src/
@@ -171,9 +153,7 @@ Bazar-Dor/
 ├── next.config.ts
 ├── tsconfig.json
 └── README.md
-```
 
-*Your actual folder names may differ. Keep only directories that exist in your project.*
 
 ## 🔮 Future Improvements
 
@@ -185,7 +165,6 @@ Potential enhancements for future development include:
 - Improving accessibility and user experience.
 - Expanding error handling and loading states.
 
-*These are possible future enhancements, not claims about existing functionality.*
 
 ## 🤝 Contributing
 
@@ -218,7 +197,6 @@ To contribute:
 
 No license has been specified here.
 
-If you decide to distribute the project under an open-source license, add the appropriate license file to the repository and update this section accordingly.
 
 ## 📬 Contact
 
